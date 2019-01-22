@@ -4,7 +4,7 @@ from django.db import models
 User = get_user_model()
 
 class UserGroup(models.Model):
-	user = models.OneToOneField(User, related_name="group")
+	user = models.OneToOneField(User, related_name="group", on_delete=models.CASCADE)
 	group = models.CharField(max_length=128, null=True)
 	
 	def __str__(self):

@@ -27,17 +27,21 @@ def signup(request):
 	return render(request, 'signup.html', {'form': form})
 
 def main(request):
-	days = Day.objects.filter(group=request.user.group)
-	data = []
-	for day in days:
-		day_data = {"day": day.date}
-		pars = []
-		for i in range(1,6):
-			para = getattr(day, 'para{}'.format(i))
-			if para:
-				pars.append({"name": para.name, "teacher": para.teacher, "room": para.room})
-		day_data['pars'] = pars
-		data.append(day_data)
-	return render(request, "main.html", {})
-	#return JsonResponse({"data": data})
-
+	if 'get_data' in request.GET.keys():
+		try:
+			days = Day.objects.filter(group=request.user.group)
+			data = []
+			for day in days:
+				day_data = {"day": day.date}
+				pars = []
+				for i in range(1,6):
+					para = getattr(day, 'para{}'.format(i))
+					if para:
+						pars.append({"name": para.name, "teacher": para.teacher, "room": para.room})
+				day_data['pars'] = pars
+				data.append(day_data)
+			return JsonResponse({"data": data})
+		except:
+			return JsonResponse({})
+	else:
+		return render(request, "main.html", {})

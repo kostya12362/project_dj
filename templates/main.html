@@ -2,34 +2,60 @@
 
 {% load static %}
 
-        {% block content %}
-<div clalss="fon">
-<nav class="navbar">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Interactive map</a>
+{% block content %}
+  <div clalss="fon">
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Interactive map</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right ">
+          <li class="active"><a href="#">Головна</a></li>
+          <li><a href="#">Реєстрація</a></li>
+          <li><a href="#">Вхід</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class=" container-fluid" id="layout">
+      <object data="{% static '1.svg' %}" type="image/svg+xml" id="imap"></object>
     </div>
-    <ul class="nav navbar-nav navbar-right ">
-      <li class="active"><a href="#">Головна</a></li>
-      <li><a href="#">Реєстрація</a></li>
-      <li><a href="#">Вхід</a></li>
-    </ul>
+    <div id="info" style="background: white">
+
+    </div>
+    <div class=" container-center">
+      <h1 class="text-center pos">Перший поверх 15 корпусу</h1>
+    </div>
+    <!-- Footer -->
+    <footer class="footer navbar-fixed-bottom text-center">
+
+
+      <p>Course work on the topic "Interactive map of the enclosure" &#169; By Ostapenko Kostya KM-51</p>
+    </footer><!--/Footer-->
   </div>
-</nav>
 
-<div class=" container-fluid">
-  
-<object   type="image/svg+xml" data="1.svg"  ></object>
-</div>
-<div class=" container-center">
-<h1 class="text-center pos" ">Перший поверх 15 корпусу</h>
-</div>
-  <!-- Footer -->
-<footer class="footer navbar-fixed-bottom text-center">
+  <script type="text/javascript">
+    var Res = [];
+    $.get('?get_data', function (res) {
+      Res = res;
+    });
 
+  jQuery(window).load(function () { // Нам нужно дождаться, пока вся графика (и наша карта тоже) загрузится, поэтому используем window.onload,
+    var svgobject = document.getElementById('imap'); // Находим тег <object>
+    if ('contentDocument' in svgobject) {              // У нас действительно там что-то есть?
+      var svgdom = jQuery(svgobject.contentDocument);
 
-  <p>Course work on the topic "Interactive map of the enclosure" &#169;  By Ostapenko Kostya KM-51</p> 
-</footer><!--/Footer-->
-</div>
-        {% endblock %}
-    
+      svgdom.click(function () {
+        console.log(Res.data[0]);
+        var d = Res.data[0];
+        $('#info').html(`
+        Day: ${Res.data[0].day} <br>
+        Lessons: ${Res.data[0].pars[0].name} <br>
+        `);
+      });
+      jQuery("#rect6037-3", svgdom).attr("fill", "red");  // Находим тег с id="figure1" в SVG DOM и заливаем его красным
+    }
+  });
+
+  </script>
+{% endblock %}
