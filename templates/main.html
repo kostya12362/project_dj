@@ -10,9 +10,7 @@
           <a class="navbar-brand" href="#">Interactive map</a>
         </div>
         <ul class="nav navbar-nav navbar-right ">
-          <li class="active"><a href="#">Головна</a></li>
-          <li><a href="#">Реєстрація</a></li>
-          <li><a href="#">Вхід</a></li>
+          <li><a href="{% url 'logout' %}?next={% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         </ul>
       </div>
     </nav>

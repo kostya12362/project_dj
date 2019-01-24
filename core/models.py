@@ -1,14 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-User = get_user_model()
+
+
+
 
 class UserGroup(models.Model):
-	user = models.OneToOneField(User, related_name="group", on_delete=models.CASCADE)
-	group = models.CharField(max_length=128, null=True)
+	name = models.CharField(max_length=128, null=True)
 	
 	def __str__(self):
-		return self.group
+		return self.name
+
+class User(AbstractUser):
+    grupa = models.ForeignKey(UserGroup, on_delete=models.CASCADE, null=True, related_name="user")
+
+    def __str__(self):
+        return self.username
 
 class Lesson(models.Model):
 	name = models.CharField(max_length=512, null=True)

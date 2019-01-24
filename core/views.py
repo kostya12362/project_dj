@@ -12,9 +12,14 @@ from .models import *
 from django.http import HttpResponse, JsonResponse
 
 
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'grupa', 'password1', 'password2', )
+
 def signup(request):
 	if request.method == 'POST':
-		form = UserCreationForm(request.POST)
+		form = SignUpForm(request.POST)
 		if form.is_valid():
 			form.save()
 			username = form.cleaned_data.get('username')
@@ -23,13 +28,13 @@ def signup(request):
 			login(request, user)
 			return redirect('main')
 	else:
-		form = UserCreationForm()
+		form = SignUpForm()
 	return render(request, 'signup.html', {'form': form})
 
 def main(request):
 	if 'get_data' in request.GET.keys():
 		try:
-			days = Day.objects.filter(group=request.user.group)
+			days = Day.objects.filter(group=request.user.grupa)
 			data = []
 			for day in days:
 				day_data = {"day": day.date}
